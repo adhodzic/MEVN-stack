@@ -41,7 +41,9 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapGetters } from 'vuex';
+
 export default {
   computed: {
     ...mapGetters([
@@ -49,10 +51,25 @@ export default {
     ])
   },
   methods: {
+    async getRoles(){
+      const res = await axios.get("http://localhost:5000/api/roles")
+      const arr = res.data;
+      const transformedArr = arr.map((e)=>{
+        return {
+          name: e.name,
+          role: e.roleID
+        }
+      })
+      console.log(transformedArr);
+      this.$store.commit('setRoles', transformedArr)
+    },
     signout(){
       localStorage.clear();
       this.$router.push({path: '/login'})
     }
+  },
+  mounted() {
+    this.getRoles();
   },
 }
 </script>

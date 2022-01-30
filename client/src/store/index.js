@@ -8,7 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: JSON.parse(localStorage.getItem("user")) || null,
-    token: localStorage.getItem("token") || null
+    token: localStorage.getItem("token") || null,
+    roles: []
   },
   getters:{
     getUser(state){
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     setToken(state, token){
       state.token = token;
+    },
+    setRoles(state, roles){
+      state.roles = roles
     }
   },
   actions: {},

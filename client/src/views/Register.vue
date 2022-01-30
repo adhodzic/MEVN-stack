@@ -34,7 +34,7 @@ import axios from "axios";
 
 export default {
   beforeRouteEnter: (to, from, next) => {
-    if (localStorage.getItem('token') == null) {
+    if (localStorage.getItem("token") == null) {
       next();
     } else {
       next("/");
@@ -64,7 +64,11 @@ export default {
           "http://localhost:5000/api/register",
           user
         );
-        this.$store.commit("setToken", response.data);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        this.$store.commit("setUser", response.data.user);
+        this.$store.commit("setToken", response.data.token);
+        this.$router.push({ path: "/profile" });
       } catch (error) {
         console.log(error);
       }
