@@ -3,6 +3,7 @@ const router = express.Router()
 const verifyUser = require('../middleware/auth.js')
 const ROLES = require('../config/roles_list.js')
 const jwt = require('jsonwebtoken')
+const roleController = require('../controllers/API/user/role_API_controller.js')
 
 router.route('/')
     .get(verifyUser(ROLES.USER, ROLES.ADMIN),(req ,res)=>{
@@ -21,5 +22,9 @@ router.route('/token')
             console.log(error)
         }   
     })
+
+router.route('/roles')
+    .get(roleController.getRoles())
+    .post(roleController.addRole());
     
 module.exports = router

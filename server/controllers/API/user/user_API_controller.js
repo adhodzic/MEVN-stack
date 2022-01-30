@@ -1,5 +1,7 @@
 const database = require("../../../services/database.js");
 const { UserModel } = require("../../../models/User.js");
+const { RoleModel } = require("../../../models/Role.js");
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 exports.getUsers = function () {
@@ -29,7 +31,11 @@ exports.registerUser = function () {
         const username = req.body.username;
         const password = req.body.password;
 
-        const newUser = new UserModel({ username: username, password: password, roles: [1111] });
+        const newUser = new UserModel({
+            username: username,
+            password: password,
+            role: "User",
+        });
 
         newUser.save(function (err) {
             console.log(err);
@@ -38,16 +44,19 @@ exports.registerUser = function () {
                 {
                     user: {
                         username: username,
-                        roles: [1111],
+                        role: "User",
                     },
                 },
                 process.env.JWT_SECRET,
-                { expiresIn: 120 }
+                { expiresIn: 480 }
             );
-            res.send(token);
+            res.json({
+                token: token,
+                user: newUser
+            });
         });
     };
-}
+};
 
 exports.loginUser = function () {
     return (req, res) => {
@@ -71,13 +80,19 @@ exports.loginUser = function () {
                         {
                             user: {
                                 username: docs.username,
-                                roles: docs.roles,
+                                role: docs.role,
                             },
                         },
                         process.env.JWT_SECRET,
-                        { expiresIn: 120 }
+                        { expiresIn: 480 }
                     );
-                    res.send(token);
+                    res.json({
+                        token: token,
+                        user: {
+                            username: docs.username,
+                            role: docs.role
+                        }
+                    });
                 });
             });
         } catch (error) {

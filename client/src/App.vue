@@ -23,13 +23,13 @@
             >
           </b-nav-form>
 
-          <b-nav-item-dropdown right>
+          <b-nav-item-dropdown v-if="getUser != null" right>
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              <em>User</em>
+              <em>{{getUser.username}}</em>
             </template>
-            <b-dropdown-item :to="{name: 'Profile'}">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+            <b-dropdown-item :to="{path: '/profile'}">Profile</b-dropdown-item>
+            <b-dropdown-item @click="signout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -39,6 +39,23 @@
     </div>
   </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+export default {
+  computed: {
+    ...mapGetters([
+      'getUser',
+    ])
+  },
+  methods: {
+    signout(){
+      localStorage.clear();
+      this.$router.push({path: '/login'})
+    }
+  },
+}
+</script>
 
 <style>
 #app {
@@ -60,5 +77,15 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+li.form-inline{
+  justify-content: center;
+}
+form.form-inline{
+  justify-content: center;
+  flex-flow: row !important;
+}
+.form-control-sm{
+  margin-right: 0.5rem;
 }
 </style>

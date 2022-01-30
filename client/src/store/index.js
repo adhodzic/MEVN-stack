@@ -3,10 +3,20 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
+
+
 export default new Vuex.Store({
   state: {
-    user: null,
-    token: null
+    user: JSON.parse(localStorage.getItem("user")) || null,
+    token: localStorage.getItem("token") || null
+  },
+  getters:{
+    getUser(state){
+      return state.user
+    },
+    getToken(state){
+      return state.token
+    }
   },
   mutations: {
     setUser(state, user){

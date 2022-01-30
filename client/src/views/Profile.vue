@@ -1,31 +1,36 @@
 <template>
     <div class="profile">
-        <div class="card">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Username</label>
-                    <input v-model="username" type="username" class="form-control" id="exampleInputUsername1" aria-describedby="usernameHelp" placeholder="Username" />
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
-                </div>
-                <button @click="loginUser" class="btn btn-primary">Login</button>
-            </div>
-        </div>
+      <h4>User: {{getUser.username}}</h4>
+      <h6>Role: {{getUser.role}}</h6>
+      <h6>Token: {{getToken}}</h6>
     </div>
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import { mapGetters } from 'vuex';
 
 export default({
+  computed: {
+    ...mapGetters([
+      'getUser',
+      'getToken'
+    ])
+  },
+  beforeRouteEnter: (to, from, next) => {
+    if(localStorage.getItem('token') != null){
+      next();
+    }else{
+      next("/login")
+    }
+  },
   data(){
     return{
-      username: "",
-      password: ""
+      username: ""
     }
-  }
+  },
+  mounted() {
+    console.log(this.getUser)
+  },
 })
 </script>
 
