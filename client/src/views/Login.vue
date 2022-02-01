@@ -11,6 +11,7 @@
                     <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
                 </div>
                 <button @click="loginUser" class="btn btn-primary">Login</button>
+                <p :to="{name: 'Register'}">Create account?</p>
             </div>
         </div>
   </div>
@@ -18,7 +19,7 @@
 
 <script>
 
-import axios from 'axios';
+import axios from '@/plugins/axios.config';
 
 export default {
   beforeRouteEnter (to, from, next) {
@@ -46,7 +47,7 @@ export default {
                     username: this.username,
                     password: this.password,
                 };
-                const response = await axios.post("http://localhost:5000/api/login", user);
+                const response = await axios.post("/login", user);
                 localStorage.setItem("token" , response.data.token)
                 localStorage.setItem("user" , JSON.stringify(response.data.user))
                 this.$store.commit('setUser', response.data.user)
@@ -66,5 +67,13 @@ export default {
     align-items: center;
     justify-content: center;
     margin-top: 100px;
+}
+.card-body p{
+    margin: 1rem auto 0 auto;
+    width: fit-content;
+    cursor: pointer;
+}
+.card-body p:hover{
+    color: var(--blue);
 }
 </style>

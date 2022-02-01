@@ -28,6 +28,10 @@ export default new Vuex.Store({
     },
     setRoles(state, roles){
       state.roles = roles
+    },
+    resetToken(state){
+      state.user = null;
+      state.token = null;
     }
   },
   actions: {},

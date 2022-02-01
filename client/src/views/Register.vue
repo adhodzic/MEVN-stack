@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from '@/plugins/axios.config';
 
 export default {
   beforeRouteEnter: (to, from, next) => {
@@ -48,9 +48,9 @@ export default {
   },
   methods: {
     async registerUser() {
-      if (this.username == "" || this.password.length < 6) {
+      if (this.username == "" || this.password.length < 4) {
         alert(
-          "email should not be empty and password must contain at least 6 characters"
+          "email should not be empty and password must contain at least 4 characters"
         );
         return;
       }
@@ -61,7 +61,7 @@ export default {
           password: this.password,
         };
         const response = await axios.post(
-          "http://localhost:5000/api/register",
+          "/register",
           user
         );
         localStorage.setItem("token", response.data.token);

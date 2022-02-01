@@ -1,18 +1,19 @@
 <template>
   <div id="app">
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <b-navbar-brand href="#">NavBar</b-navbar-brand>
+      <b-navbar-brand href="#">MEVN Stack App</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item :to="{name: 'Home'}">Home</b-nav-item>
+          <b-nav-item v-if="getToken" :to="{name: 'Home'}">Home</b-nav-item>
+          <b-nav-item v-if="getToken && getUser.role == 'Admin'" :to="{name: 'Dashboard'}">Dashboard</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-form>
+          <b-nav-form v-if="currentRouteName == 'Home'">
             <b-form-input
               size="sm"
               class="mr-sm-2"
@@ -23,7 +24,7 @@
             >
           </b-nav-form>
 
-          <b-nav-item-dropdown v-if="getUser != null" right>
+          <b-nav-item-dropdown v-if="getUser" right>
             <!-- Using 'button-content' slot -->
             <template #button-content>
               <em>{{getUser.username}}</em>
@@ -41,18 +42,22 @@
 </template>
 
 <script>
-import axios from 'axios';
+/* import axios from '@/plugins/axios.config'; */
 import { mapGetters } from 'vuex';
 
 export default {
   computed: {
     ...mapGetters([
       'getUser',
-    ])
+      'getToken'
+    ]),
+    currentRouteName() {
+        return this.$route.name;
+    }
   },
   methods: {
-    async getRoles(){
-      const res = await axios.get("http://localhost:5000/api/roles")
+    /* async getRoles(){
+      const res = await axios.get("/roles")
       const arr = res.data;
       const transformedArr = arr.map((e)=>{
         return {
@@ -62,14 +67,15 @@ export default {
       })
       console.log(transformedArr);
       this.$store.commit('setRoles', transformedArr)
-    },
+    }, */
     signout(){
       localStorage.clear();
+      this.$store.commit('resetToken');
       this.$router.push({path: '/login'})
     }
   },
   mounted() {
-    this.getRoles();
+    /* this.getRoles(); */
   },
 }
 </script>
@@ -94,6 +100,10 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+.container{
+  padding-top: 2rem;
+  word-wrap: break-word;
 }
 li.form-inline{
   justify-content: center;
