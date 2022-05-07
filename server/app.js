@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const cors = require('cors');
+const database = require("./services/database");
 require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
@@ -10,10 +11,9 @@ const commonRouter = require('./routes/common.routes.js')
 const app = express();
 
 app.use(cors())
-
+database.dbConnect()
 app.use(bodyParser.json())
-
-app.use('/api', [userRouter, commonRouter])
+app.use('/api',[userRouter, commonRouter])
 
 const port = process.env.PORT || 5000
 

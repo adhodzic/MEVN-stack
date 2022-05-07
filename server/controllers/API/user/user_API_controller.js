@@ -1,11 +1,13 @@
 const database = require("../../../services/database.js");
 const { UserModel } = require("../../../models/User.js");
 const { RoleModel } = require("../../../models/Role.js");
+const authHelper = require("../../../helpers/authentication.helper")
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+
+
 exports.getUsers = function () {
-    database.dbConnect();
+
     return (req, res) => {
         console.log(req.body);
         res.sendStatus(200);
@@ -13,7 +15,7 @@ exports.getUsers = function () {
 };
 
 exports.deleteUser = function () {
-    database.dbConnect();
+
     return (req, res) => {
         console.log(req.body);
         res.sendStatus(200);
@@ -21,7 +23,7 @@ exports.deleteUser = function () {
 };
 
 exports.registerUser = function () {
-    database.dbConnect();
+
     return (req, res) => {
         console.log(req.body);
         if (!req.body.username && !req.body.password) {
@@ -72,27 +74,15 @@ exports.loginUser = function () {
 
                 if (err) return res.json({ err: err });
 
-                bcrypt.compare(password, docs.password).then(function (result) {
-                    if (!result) {
-                        return res.sendStatus(400);
-                    }
-                    const token = jwt.sign(
-                        {
-                            user: {
-                                username: docs.username,
-                                role: docs.role,
-                            },
-                        },
-                        process.env.JWT_SECRET,
-                        { expiresIn: 480 }
-                    );
-                    res.json({
-                        token: token,
-                        user: {
-                            username: docs.username,
-                            role: docs.role
-                        }
-                    });
+                let userData = {
+                    username: docs.username,
+                    role: docs.role
+                }
+                let newToken = authHelper.createToken(userData, docs.password, 480);
+
+                res.json({
+                    user: userData,
+                    token: newToken
                 });
             });
         } catch (error) {

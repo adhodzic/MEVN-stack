@@ -10,8 +10,11 @@
                     <label for="exampleInputPassword1">Password</label>
                     <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
                 </div>
-                <button @click="loginUser" class="btn btn-primary">Login</button>
-                <p :to="{name: 'Register'}">Create account?</p>
+                <div class="form-group">
+                    <button @click="loginUser" class="btn btn-primary">Login</button>
+                    <br><br>
+                    <a href="/register">Create account?</a>
+                </div>  
             </div>
         </div>
   </div>
@@ -68,12 +71,14 @@ export default {
     justify-content: center;
     margin-top: 100px;
 }
-.card-body p{
+.card-body a{
+    color: #2c3e50;
     margin: 1rem auto 0 auto;
     width: fit-content;
     cursor: pointer;
 }
-.card-body p:hover{
+.card-body a:hover{
     color: var(--blue);
+    text-decoration: none;
 }
 </style>
